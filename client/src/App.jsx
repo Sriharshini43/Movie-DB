@@ -9,6 +9,7 @@ import Search from "./components/Search";
 import CurrentList from "./components/pages/CurrentList";
 import MovieDetails from "./components/pages/MovieDetails";
 import Loading from "./components/Loading";
+import DataFetcher from "./components/DataFetcher"; // Import the new component
 
 import "./index.css";
 
@@ -133,7 +134,7 @@ const App = () => {
                 <div className="back-btn-container">
                   <button className="back-btn">
                     <Link to="/">
-                      <i class="fa-solid fa-circle-arrow-left"></i>
+                      <i className="fa-solid fa-circle-arrow-left"></i>
                     </Link>
                   </button>
                 </div>
@@ -154,6 +155,8 @@ const App = () => {
             )
           }
         />
+        {/* New route for DataFetcher */}
+        <Route path="/data" element={<DataFetcher />} />
       </Routes>
     </div>
   );
