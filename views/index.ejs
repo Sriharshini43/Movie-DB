@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Registration</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"> <!-- Font Awesome -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="./css/main.css">
+
+    <style>
+        /* Additional CSS for styling icons */
+        .input-group-addon {
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #5cb85c;
+            padding: 6px 12px;
+            margin-bottom: 10px;
+        }
+
+        /* CSS for colors */
+        body {
+            background-color: #ebbd9b;
+        }
+
+        .container {
+            margin-top: 50px;
+        }
+
+        p {
+            color: #333;
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-control {
+            border-radius: 0;
+        }
+
+        .btn-success {
+            background-color: #5cb85c;
+            border-color: #4cae4c;
+        }
+
+        .btn-success:hover {
+            background-color: #4cae4c;
+            border-color: #4cae4c;
+        }
+
+        .mssg {
+            text-align: center;
+            margin-top: 20px;
+            color: #fff;
+        }
+
+        #check {
+            font-size: 18px;
+        }
+
+        a {
+            color: #337ab7;
+        }
+    </style>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+
+        $("#form1").submit(function(event) {
+            event.preventDefault();
+
+            // Get email and password values
+            var email = $('input[name="email"]').val();
+            var password = $('#password').val();
+
+            // Check if email is a Gmail address
+            if (!email.endsWith('@gmail.com')) {
+                $('#check').html("Please enter a valid Gmail address");
+                return;
+            }
+
+            // Check if password length is less than 8
+            if (password.length < 8) {
+                $('#check').html("Password must be at least 8 characters long");
+                return;
+            }
+
+            // Check if password contains at least one digit
+            var digitPattern = /\d/;
+            if (!digitPattern.test(password)) {
+                $('#check').html("Password must contain at least one digit");
+                return;
+            }
+
+            // If email and password requirements are valid, proceed with form submission
+            $.ajax({
+                type: 'POST',
+                url: '/',
+                data: $('#form1').serialize(),
+                dataType: "json",
+                success: function(response){
+                    $('#form1')[0].reset();
+                    document.getElementById("check").innerHTML=response.Success;
+                    setTimeout(function(){
+                        document.getElementById("check").innerHTML="";
+                    },3000);
+                    if (response.Success=="You are registered,You can login now.") {
+                        document.getElementById("aa").click();
+                    };
+                },
+                error: function() {
+                }
+            })
+        });
+    });
+</script>
+
+</head>
+<body>
+
+    <div class="container">
+        <div class="col-md-4 col-md-offset-4">
+            <p>Register Now</p>
+            <div class="form-group">
+                <form id="form1" method="post">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fas fa-envelope"></i></span>
+                        <input type="email" name="email" placeholder="E-mail" required="" class="form-control">
+                    </div><br/>
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fas fa-user"></i></span>
+                        <input type="text" name="username" placeholder="Username" required="" class="form-control">
+                    </div><br/>
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fas fa-lock"></i></span>
+                        <input type="password" id="password" name="password" placeholder="Password" required="" class="form-control">
+                    </div><br/>
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fas fa-lock"></i></span>
+                        <input type="password" name="passwordConf" placeholder="Confirm Password" required="" class="form-control">
+                    </div><br/>
+                    <input type="submit" value="Register" class="btn btn-success">
+                </form>
+            </div>
+            
+            <div class="mssg bg-danger">
+                <span id="check"></span>
+            </div>
+            <div>
+                <span>Already Registered! <a href="/login">Login</a></span>
+            </div>
+            <div id="LangTable"><a href="/login" id="aa"></a></div>
+        </div>
+    </div>
+
+</body>
+</html>
