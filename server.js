@@ -35,7 +35,7 @@ app.use(express.urlencoded({ extended: false }));
 
 // CORS configuration
 app.use(cors({
-  origin: 'http://localhost:3001',
+  origin: 'https://movie-db-vert-five.vercel.app',
   credentials: true
 }));
 
