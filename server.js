@@ -4,20 +4,7 @@ const mongoose = require('mongoose');
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 const indexRouter = require('./routes/index');
-const path = require('path');
 const app = express();
-
-app.use('/uploads', express.static('uploads'));
-
-// Route to list files in uploads directory for debugging
-app.get('/list-uploads', (req, res) => {
-  fs.readdir(uploadsDir, (err, files) => {
-    if (err) {
-      return res.status(500).send('Unable to list files.');
-    }
-    res.json(files);
-  });
-});
 
 mongoose.connect('mongodb+srv://harshini:palaka8@cluster0.ezhx5uc.mongodb.net/registrationFormHeruko?retryWrites=true&w=majority', {
   useNewUrlParser: true,
@@ -46,11 +33,11 @@ app.use(express.urlencoded({ extended: false }));
 
 // CORS configuration
 app.use(cors({
-  origin: 'https://movie-db-vert-five.vercel.app', // Frontend URL
+  origin: 'https://movie-db-vert-five.vercel.app', 
   credentials: true
 }));
 
-app.use(express.static(path.join(__dirname, 'views')));
+app.use(express.static(__dirname + '/views'));
 app.use('/', indexRouter);
 
 // catch 404 and forward to error handler
