@@ -49,7 +49,7 @@ const MovieListDisplay = () => {
     <div>
       <h2 style={{ color: "white" }}>Movie Lists</h2>
       {movieLists.length === 0 ? (
-        <p>No movie lists found.</p>
+        <p style={{ color: "white" }}>No movie lists found.</p>
       ) : (
         <div style={styles.container}>
           {movieLists.map((list, index) => (
