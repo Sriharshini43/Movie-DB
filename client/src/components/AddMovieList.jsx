@@ -18,7 +18,6 @@ const AddMovieList = () => {
         isValid = false;
         break;
       }
-      console.log(`${name}: ${value}`);
     }
 
     if (isValid) {
@@ -26,8 +25,7 @@ const AddMovieList = () => {
         const response = await axios.post("https://movie-db-up5l.onrender.com/add-movie-list", formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
-          },
-          withCredentials: true
+          }
         });
         console.log("Response:", response.data);
         navigate("/profile");
@@ -39,6 +37,7 @@ const AddMovieList = () => {
       setError(true);
     }
   };
+
   return (
     <div className="container" style={{ textAlign: "center" }}>
       <div className="col-md-4 col-md-offset-4">
