@@ -23,7 +23,7 @@ const AddMovieList = () => {
 
     if (isValid) {
       try {
-        const response = await axios.post("http://127.0.0.1:3000/add-movie-list", formData, {
+        const response = await axios.post("https://movie-db-up5l.onrender.com/add-movie-list", formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
           },
