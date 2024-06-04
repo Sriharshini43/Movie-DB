@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
 
 const Collections = (props) => {
   const [isActive, setIsActive] = useState([true, false, false, false]);
@@ -72,18 +71,6 @@ const Collections = (props) => {
         <i className="fa-solid fa-square-caret-up upcoming-icon"></i>
         <p>UPCOMING</p>
       </div>
-      <Link to="/public-movies" style={{ textDecoration: "none" }}>
-        <div
-          className={isActive[4] ? "collections-inner active" : "collections-inner"}
-          onClick={() => {
-            props.setActiveList("Movie List");
-            toggleClass(4);
-          }}
-        >
-          <i className="fa-solid fa-film movie-list-icon"></i>
-          <p>MOVIE LIST</p>
-        </div>
-      </Link>
     </div>
   );
 };
