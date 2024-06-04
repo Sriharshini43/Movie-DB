@@ -6,6 +6,8 @@ const MongoStore = require('connect-mongo')(session);
 const indexRouter = require('./routes/index');
 const app = express();
 
+app.use('/uploads', express.static('uploads'));
+
 mongoose.connect('mongodb+srv://harshini:palaka8@cluster0.ezhx5uc.mongodb.net/registrationFormHeruko?retryWrites=true&w=majority', {
   useNewUrlParser: true,
   useUnifiedTopology: true
@@ -33,7 +35,7 @@ app.use(express.urlencoded({ extended: false }));
 
 // CORS configuration
 app.use(cors({
-  origin: 'https://movie-db-vert-five.vercel.app', 
+  origin: 'http://localhost:3001',
   credentials: true
 }));
 
