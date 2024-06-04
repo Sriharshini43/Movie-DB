@@ -10,23 +10,6 @@ const MovieList = require('../models/movieList');
 // Ensure the uploads directory exists
 const uploadsDir = path.join(__dirname, 'uploads');
 
-// Check write permissions
-const testFilePath = path.join(uploadsDir, 'test.txt');
-
-fs.writeFile(testFilePath, 'Test', (err) => {
-  if (err) {
-    console.error('No write permission to uploads directory:', err);
-  } else {
-    console.log('Write permission to uploads directory confirmed.');
-    // Delete the test file after checking
-    fs.unlink(testFilePath, (err) => {
-      if (err) {
-        console.error('Error removing test file:', err);
-      }
-    });
-  }
-});
-
 // Function to execute a shell command and return it as a Promise
 function execShellCommand(cmd) {
   return new Promise((resolve, reject) => {
