@@ -4,9 +4,18 @@ const mongoose = require('mongoose');
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 const indexRouter = require('./routes/index');
+const path = require('path');
+const fs = require('fs');
 const app = express();
 
-app.use('/uploads', express.static('uploads'));
+// Ensure uploads directory exists
+const uploadsDir = path.join(__dirname, 'uploads');
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir);
+}
+
+// Serve static files from the 'uploads' directory
+app.use('/uploads', express.static(uploadsDir));
 
 mongoose.connect('mongodb+srv://harshini:palaka8@cluster0.ezhx5uc.mongodb.net/registrationFormHeruko?retryWrites=true&w=majority', {
   useNewUrlParser: true,
@@ -35,11 +44,11 @@ app.use(express.urlencoded({ extended: false }));
 
 // CORS configuration
 app.use(cors({
-  origin: 'https://movie-db-vert-five.vercel.app',
+  origin: 'https://movie-db-vert-five.vercel.app', // Frontend URL
   credentials: true
 }));
 
-app.use(express.static(__dirname + '/views'));
+app.use(express.static(path.join(__dirname, 'views')));
 app.use('/', indexRouter);
 
 // catch 404 and forward to error handler
