@@ -12,10 +12,26 @@ const app = express();
 const uploadsDir = path.join(__dirname, 'uploads');
 if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir);
+  console.log('Uploads directory created.');
+} else {
+  console.log('Uploads directory already exists.');
 }
 
 // Serve static files from the 'uploads' directory
-app.use('/uploads', express.static(uploadsDir));
+app.use('/uploads', (req, res, next) => {
+  console.log(`Serving static file request: ${req.path}`);
+  next();
+}, express.static(uploadsDir));
+
+// Route to list files in uploads directory for debugging
+app.get('/list-uploads', (req, res) => {
+  fs.readdir(uploadsDir, (err, files) => {
+    if (err) {
+      return res.status(500).send('Unable to list files.');
+    }
+    res.json(files);
+  });
+});
 
 mongoose.connect('mongodb+srv://harshini:palaka8@cluster0.ezhx5uc.mongodb.net/registrationFormHeruko?retryWrites=true&w=majority', {
   useNewUrlParser: true,
