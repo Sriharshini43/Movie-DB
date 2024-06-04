@@ -8,55 +8,29 @@ router.get('/', function (req, res, next) {
   return res.render('index.ejs');
 });
 
+// Ensure uploads directory exists
+const ensureUploadsDirectory = () => {
+  const uploadPath = path.join(__dirname, 'uploads');
+  if (!fs.existsSync(uploadPath)) {
+    fs.mkdirSync(uploadPath);
+  }
+};
+
+// Multer storage configuration
 const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
+  destination: (req, file, cb) => {
+    ensureUploadsDirectory();
     cb(null, 'uploads/');
   },
-  filename: function (req, file, cb) {
+  filename: (req, file, cb) => {
     cb(null, Date.now() + '-' + file.originalname);
   }
 });
 
 const upload = multer({ storage: storage });
 
-router.get('/', function (req, res, next) {
-  return res.render('index.ejs');
-});
-
-// This route handles fetching movie lists
-router.get('/movie-lists', (req, res) => {
-  MovieList.find()
-    .select('title description releaseDate runtime rating productionCompany originalLanguage hero heroine comedian director musician movieImage heroImage heroineImage directorImage musicianImage comedianImage visibility')
-    .then(movieLists => {
-      movieLists.forEach(movie => {
-        movie.movieImage = encodeURI(movie.movieImage);
-        movie.heroImage = encodeURI(movie.heroImage);
-        movie.heroineImage = encodeURI(movie.heroineImage);
-        movie.directorImage = encodeURI(movie.directorImage);
-        movie.musicianImage = encodeURI(movie.musicianImage);
-        movie.comedianImage = encodeURI(movie.comedianImage);
-      });
-      res.json(movieLists);
-    })
-    .catch(err => {
-      console.error('Error fetching movie lists:', err);
-      res.status(500).json({ error: 'An error occurred while fetching movie lists' });
-    });
-});
-
-router.get('/public-movies', (req, res) => {
-  MovieList.find({ visibility: 'public' })
-    .then(publicMovies => {
-      res.json(publicMovies);
-    })
-    .catch(err => {
-      console.error('Error fetching public movies:', err);
-      res.status(500).json({ error: 'An error occurred while fetching public movies' });
-    });
-});
-
-// This route handles adding a movie list
-router.post('/add-movie-list', upload.fields([
+// Route to handle adding a movie list
+app.post('/add-movie-list', upload.fields([
   { name: 'movieImage', maxCount: 1 },
   { name: 'heroImage', maxCount: 1 },
   { name: 'heroineImage', maxCount: 1 },
@@ -68,12 +42,12 @@ router.post('/add-movie-list', upload.fields([
   const files = req.files;
 
   const correctedFiles = {
-    movieImage: files.movieImage[0].path.replace(/\\/g, '/'),
-    heroImage: files.heroImage[0].path.replace(/\\/g, '/'),
-    heroineImage: files.heroineImage[0].path.replace(/\\/g, '/'),
-    directorImage: files.directorImage[0].path.replace(/\\/g, '/'),
-    musicianImage: files.musicianImage[0].path.replace(/\\/g, '/'),
-    comedianImage: files.comedianImage[0].path.replace(/\\/g, '/')
+    movieImage: files.movieImage ? files.movieImage[0].path.replace(/\\/g, '/') : null,
+    heroImage: files.heroImage ? files.heroImage[0].path.replace(/\\/g, '/') : null,
+    heroineImage: files.heroineImage ? files.heroineImage[0].path.replace(/\\/g, '/') : null,
+    directorImage: files.directorImage ? files.directorImage[0].path.replace(/\\/g, '/') : null,
+    musicianImage: files.musicianImage ? files.musicianImage[0].path.replace(/\\/g, '/') : null,
+    comedianImage: files.comedianImage ? files.comedianImage[0].path.replace(/\\/g, '/') : null,
   };
 
   const newMovieList = new MovieList({
@@ -105,6 +79,18 @@ router.post('/add-movie-list', upload.fields([
     .catch(err => {
       console.error('Error adding movie list:', err);
       res.status(500).json({ error: 'An error occurred while adding the movie list' });
+    });
+});
+
+// Route to fetch all movie lists
+app.get('/movie-lists', (req, res) => {
+  MovieList.find()
+    .then(movieLists => {
+      res.json(movieLists);
+    })
+    .catch(err => {
+      console.error('Error fetching movie lists:', err);
+      res.status(500).json({ error: 'An error occurred while fetching movie lists' });
     });
 });
 
