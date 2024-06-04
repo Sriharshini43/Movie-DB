@@ -8,7 +8,6 @@ router.get('/', function (req, res, next) {
   return res.render('index.ejs');
 });
 
-// Ensure uploads directory exists
 const ensureUploadsDirectory = () => {
   const uploadPath = path.join(__dirname, 'uploads');
   if (!fs.existsSync(uploadPath)) {
@@ -30,7 +29,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 // Route to handle adding a movie list
-app.post('/add-movie-list', upload.fields([
+router.post('/add-movie-list', upload.fields([
   { name: 'movieImage', maxCount: 1 },
   { name: 'heroImage', maxCount: 1 },
   { name: 'heroineImage', maxCount: 1 },
@@ -83,7 +82,7 @@ app.post('/add-movie-list', upload.fields([
 });
 
 // Route to fetch all movie lists
-app.get('/movie-lists', (req, res) => {
+router.get('/movie-lists', (req, res) => {
   MovieList.find()
     .then(movieLists => {
       res.json(movieLists);
