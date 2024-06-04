@@ -35,7 +35,7 @@ app.use(express.urlencoded({ extended: false }));
 
 // CORS configuration
 app.use(cors({
-  origin: 'https://movie-db-up5l.onrender.com',
+  origin: 'https://movie-db-vert-five.vercel.app',
   credentials: true
 }));
 
