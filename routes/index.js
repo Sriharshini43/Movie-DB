@@ -1,94 +1,34 @@
 const express = require('express');
-const multer = require('multer');
-const { exec } = require('child_process');
-const fs = require('fs');
-const path = require('path');
 const router = express.Router();
 const User = require('../models/user');
 const MovieList = require('../models/movieList');
 
-// Ensure the uploads directory exists
-const uploadsDir = path.join(__dirname, 'uploads');
+router.post('/add-movie-list', async (req, res) => {
+  try {
+    const movieListInfo = req.body;
+    const movieList = new MovieList(movieListInfo);
 
-// Function to execute a shell command and return it as a Promise
-function execShellCommand(cmd) {
-  return new Promise((resolve, reject) => {
-    exec(cmd, (error, stdout, stderr) => {
-      if (error) {
-        console.warn(error);
-        reject(stderr);
-      }
-      resolve(stdout ? stdout : stderr);
-    });
-  });
-}
-
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'uploads/');
-  },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + '-' + file.originalname);
+    await movieList.save();
+    res.status(201).json({ message: 'Movie list added successfully', movieList });
+  } catch (error) {
+    console.error('Error adding movie list:', error);
+    res.status(500).json({ error: 'An error occurred while adding the movie list' });
   }
 });
 
-const upload = multer({ storage: storage });
-
-// This route handles adding a movie list
-router.post('/add-movie-list', upload.fields([
-  { name: 'movieImage', maxCount: 1 },
-  { name: 'heroImage', maxCount: 1 },
-  { name: 'heroineImage', maxCount: 1 },
-  { name: 'directorImage', maxCount: 1 },
-  { name: 'musicianImage', maxCount: 1 },
-  { name: 'comedianImage', maxCount: 1 },
-]), async (req, res) => {
-  const movieListInfo = req.body;
-  const files = req.files;
-
-  const correctedFiles = {
-    movieImage: files.movieImage[0].path.replace(/\\/g, '/'),
-    heroImage: files.heroImage[0].path.replace(/\\/g, '/'),
-    heroineImage: files.heroineImage[0].path.replace(/\\/g, '/'),
-    directorImage: files.directorImage[0].path.replace(/\\/g, '/'),
-    musicianImage: files.musicianImage[0].path.replace(/\\/g, '/'),
-    comedianImage: files.comedianImage[0].path.replace(/\\/g, '/')
-  };
-
-  const newMovieList = new MovieList({
-    title: movieListInfo.title,
-    description: movieListInfo.description,
-    releaseDate: movieListInfo.releaseDate,
-    runtime: movieListInfo.runtime,
-    rating: movieListInfo.rating,
-    productionCompany: movieListInfo.productionCompany,
-    originalLanguage: movieListInfo.originalLanguage,
-    hero: movieListInfo.hero,
-    heroine: movieListInfo.heroine,
-    comedian: movieListInfo.comedian,
-    director: movieListInfo.director,
-    musician: movieListInfo.musician,
-    movieImage: correctedFiles.movieImage,
-    heroImage: correctedFiles.heroImage,
-    heroineImage: correctedFiles.heroineImage,
-    directorImage: correctedFiles.directorImage,
-    musicianImage: correctedFiles.musicianImage,
-    comedianImage: correctedFiles.comedianImage,
-    visibility: movieListInfo.visibility
-  });
-
+router.get('/movie-image/:id', async (req, res) => {
   try {
-    await newMovieList.save();
+    const movieList = await MovieList.findById(req.params.id);
 
-    // Execute Git commands to commit and push the changes
-    await execShellCommand('git add uploads/');
-    await execShellCommand('git commit -m "Add uploaded movie files"');
-    await execShellCommand('git push origin main');  // Adjust branch as necessary
+    if (!movieList || !movieList.movieImage) {
+      return res.status(404).json({ error: 'Movie image not found' });
+    }
 
-    res.json({ message: 'Movie list added and files pushed to GitHub successfully', movieList: newMovieList });
+    res.set('Content-Type', 'image/jpeg');
+    res.send(movieList.movieImage);
   } catch (error) {
-    console.error('Error adding movie list or pushing to GitHub:', error);
-    res.status(500).json({ error: 'An error occurred while adding the movie list or pushing to GitHub' });
+    console.error('Error fetching movie image:', error);
+    res.status(500).json({ error: 'An error occurred while fetching movie image' });
   }
 });
 
