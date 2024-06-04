@@ -1,8 +1,23 @@
 const express = require('express');
 const multer = require('multer');
+const { exec } = require('child_process');
 const router = express.Router();
 const User = require('../models/user');
 const MovieList = require('../models/movieList'); 
+const path = require('path');
+
+// Function to execute a shell command and return it as a Promise
+function execShellCommand(cmd) {
+  return new Promise((resolve, reject) => {
+    exec(cmd, (error, stdout, stderr) => {
+      if (error) {
+        console.warn(error);
+        reject(stderr);
+      }
+      resolve(stdout ? stdout : stderr);
+    });
+  });
+}
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -15,8 +30,6 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-// Other routes ...
-
 // This route handles adding a movie list
 router.post('/add-movie-list', upload.fields([
   { name: 'movieImage', maxCount: 1 },
@@ -25,7 +38,7 @@ router.post('/add-movie-list', upload.fields([
   { name: 'directorImage', maxCount: 1 },
   { name: 'musicianImage', maxCount: 1 },
   { name: 'comedianImage', maxCount: 1 },
-]), (req, res) => {
+]), async (req, res) => {
   const movieListInfo = req.body;
   const files = req.files;
 
@@ -60,16 +73,20 @@ router.post('/add-movie-list', upload.fields([
     visibility: movieListInfo.visibility
   });
 
-  newMovieList.save()
-    .then(movieList => {
-      res.json({ message: 'Movie list added successfully', movieList });
-    })
-    .catch(err => {
-      console.error('Error adding movie list:', err);
-      res.status(500).json({ error: 'An error occurred while adding the movie list' });
-    });
-});
+  try {
+    await newMovieList.save();
 
+    // Execute Git commands to commit and push the changes
+    await execShellCommand('git add uploads/');
+    await execShellCommand('git commit -m "Add uploaded movie files"');
+    await execShellCommand('git push origin main');  // Adjust branch as necessary
+
+    res.json({ message: 'Movie list added and files pushed to GitHub successfully', movieList: newMovieList });
+  } catch (error) {
+    console.error('Error adding movie list or pushing to GitHub:', error);
+    res.status(500).json({ error: 'An error occurred while adding the movie list or pushing to GitHub' });
+  }
+});
 
 router.post('/', function (req, res, next) {
   const personInfo = req.body;
