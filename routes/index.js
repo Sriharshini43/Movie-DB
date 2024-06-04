@@ -1,10 +1,38 @@
 const express = require('express');
 const multer = require('multer');
 const { exec } = require('child_process');
+const fs = require('fs');
+const path = require('path');
 const router = express.Router();
 const User = require('../models/user');
-const MovieList = require('../models/movieList'); 
-const path = require('path');
+const MovieList = require('../models/movieList');
+
+// Ensure the uploads directory exists
+const uploadsDir = path.join(__dirname, 'uploads');
+
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir);
+  console.log('Uploads directory created.');
+} else {
+  console.log('Uploads directory already exists.');
+}
+
+// Check write permissions
+const testFilePath = path.join(uploadsDir, 'test.txt');
+
+fs.writeFile(testFilePath, 'Test', (err) => {
+  if (err) {
+    console.error('No write permission to uploads directory:', err);
+  } else {
+    console.log('Write permission to uploads directory confirmed.');
+    // Delete the test file after checking
+    fs.unlink(testFilePath, (err) => {
+      if (err) {
+        console.error('Error removing test file:', err);
+      }
+    });
+  }
+});
 
 // Function to execute a shell command and return it as a Promise
 function execShellCommand(cmd) {
