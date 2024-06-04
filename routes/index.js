@@ -10,13 +10,6 @@ const MovieList = require('../models/movieList');
 // Ensure the uploads directory exists
 const uploadsDir = path.join(__dirname, 'uploads');
 
-if (!fs.existsSync(uploadsDir)) {
-  fs.mkdirSync(uploadsDir);
-  console.log('Uploads directory created.');
-} else {
-  console.log('Uploads directory already exists.');
-}
-
 // Check write permissions
 const testFilePath = path.join(uploadsDir, 'test.txt');
 
