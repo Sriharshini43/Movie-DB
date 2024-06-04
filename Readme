@@ -21,6 +21,8 @@ First Terminal:
     cd client
     ```
 
+Note: Currently working on implementing the ability for users to create lists of movies. Users will have the option to add movies to these lists, which will then be displayed on the home page. Each user can create multiple lists, and these lists can be categorized as either public or private. Public lists will be accessible to anyone with the link, while private lists will only be visible to the user who created them. This functionality is being developed to enhance the user experience and provide more personalized content discovery options.
+
     Install dependencies
     ```
     npm install
