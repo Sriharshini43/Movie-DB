@@ -5,23 +5,9 @@ const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 const indexRouter = require('./routes/index');
 const path = require('path');
-const fs = require('fs');
 const app = express();
 
-// Ensure uploads directory exists
-const uploadsDir = path.join(__dirname, 'uploads');
-if (!fs.existsSync(uploadsDir)) {
-  fs.mkdirSync(uploadsDir);
-  console.log('Uploads directory created.');
-} else {
-  console.log('Uploads directory already exists.');
-}
-
-// Serve static files from the 'uploads' directory
-app.use('/uploads', (req, res, next) => {
-  console.log(`Serving static file request: ${req.path}`);
-  next();
-}, express.static(uploadsDir));
+app.use('/uploads', express.static('uploads'));
 
 // Route to list files in uploads directory for debugging
 app.get('/list-uploads', (req, res) => {
