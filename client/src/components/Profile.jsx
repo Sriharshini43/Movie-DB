@@ -1,27 +1,21 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import MovieListDisplay from "./MovieListDisplay";
+import React from "react";
 
 const Profile = () => {
-  const [movieLists, setMovieLists] = useState([]);
+  const styles = {
+    color: 'white',
+    textAlign: 'center',
+    marginTop: '20px',
+    fontSize: '18px'
+  };
 
-  useEffect(() => {
-    // Fetch user's movie lists from backend upon component mount
-    axios.get('https://movie-db-up5l.onrender.com/movie-lists', { withCredentials: true })
-      .then(response => {
-        setMovieLists(response.data);
-      })
-      .catch(error => {
-        console.error("Error fetching movie lists:", error);
-      });
-  }, []);
-
-  // Log movieLists before rendering MovieListDisplay
-  console.log("Movie Lists:", movieLists);
+  const headingStyle = {
+    color: 'white'
+  };
 
   return (
-    <div>
-      <MovieListDisplay movieLists={movieLists} />
+    <div style={styles}>
+      <h1 style={headingStyle}>Movie Lists</h1>
+      <p>No movie lists found</p>
     </div>
   );
 };
