@@ -3,13 +3,11 @@ import axios from "axios";
 import { Route, Routes, Link } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Profile from "./components/Profile";
-import AddMovieList from "./components/AddMovieList";
 import Home from "./components/Home";
 import Search from "./components/Search";
 import CurrentList from "./components/pages/CurrentList";
 import MovieDetails from "./components/pages/MovieDetails";
 import Loading from "./components/Loading";
-import DataFetcher from "./components/DataFetcher"; // Import the new component
 
 import "./index.css";
 
@@ -106,7 +104,6 @@ const App = () => {
       <Routes>
         {/* Define routes for Profile and AddMovieList */}
         <Route path="/profile" element={<Profile />} />
-        <Route path="/add-movie-list" element={<AddMovieList />} />
         {/* Existing routes */}
         <Route
           exact
@@ -155,8 +152,6 @@ const App = () => {
             )
           }
         />
-        {/* New route for DataFetcher */}
-        <Route path="/data" element={<DataFetcher />} />
       </Routes>
     </div>
   );
