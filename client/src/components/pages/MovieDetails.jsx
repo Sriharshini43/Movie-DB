@@ -28,11 +28,20 @@ const MovieDetails = (props) => {
   };
 
   const styles = {
-    backgroundImage: `url(https://image.tmdb.org/t/p/original/${props.movieDetails.backdropPath})`,
-    backgroundRepeat: "no-repeat",
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-  };
+    addToListBtn: {
+      backgroundColor: "#ff6347",
+      border: "none",
+      color: "white",
+      padding: "10px 20px",
+      textAlign: "center",
+      textDecoration: "none",
+      display: "inline-block",
+      fontSize: "16px",
+      marginTop: "20px",
+      cursor: "pointer",
+      borderRadius: "5px",
+    }
+  };  
 
   return (
     <div className="movie-details-container">
@@ -84,6 +93,9 @@ const MovieDetails = (props) => {
             Original Language:{" "}
             <span>{getLanguageFullName(props.movieDetails.originalLanguage)}</span>
           </p>
+          <button style={styles.addToListBtn}>
+            Add to Movie List
+          </button>
         </div>
       </div>
       <div className="cast-container">
