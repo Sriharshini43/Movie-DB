@@ -6,7 +6,6 @@ const MongoStore = require('connect-mongo')(session);
 const indexRouter = require('./routes/index');
 const app = express();
 
-app.use('/uploads', express.static('uploads'));
 
 mongoose.connect('mongodb+srv://harshini:palaka8@cluster0.ezhx5uc.mongodb.net/registrationFormHeruko?retryWrites=true&w=majority', {
   useNewUrlParser: true,
