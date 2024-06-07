@@ -117,7 +117,6 @@ const Navbar = () => {
             Welcome, {username}!
             <div style={styles.dropdown}>
               <Link to="/profile" style={styles.dropdownItem}>Profile</Link>
-              <Link to="/add-movie-list" style={styles.dropdownItem}>Add Movie</Link>
             </div>
           </div>
           <button onClick={handleLogout} style={styles.logoutButton}>Logout</button>
