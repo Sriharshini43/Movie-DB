@@ -6,6 +6,10 @@ const router = express.Router();
 
 router.use(bodyParser.json());
 
+router.get('/', function (req, res, next) {
+  return res.render('index.ejs');
+});
+
 router.post('/', function (req, res, next) {
   const personInfo = req.body;
 
