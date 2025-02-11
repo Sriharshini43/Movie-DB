@@ -1,0 +1,38 @@
+Live URL: 
+# Overview
+
+A movie search app where you can get detailed information about movies. This app pulls data from [TMDB] API. Features: User authentication.
+
+
+## Built With
+
+- React
+- React Router
+- CSS
+- TMDB API
+- Javascript XML
+- Mongodb
+- Express, Node.js
+
+## Usage
+
+First Terminal:
+    Clone this repository-
+    ```
+    cd client
+    ```
+
+    Install dependencies
+    ```
+    npm install
+    ```
+
+    Run the application
+    ```
+    npm start
+    ```
+
+Second Terminal:
+    node server.js
+
+

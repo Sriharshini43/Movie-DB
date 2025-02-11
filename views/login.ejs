@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="./css/main.css">
+
+    <style>
+        body {
+            background-color: #f2a9c3;
+            font-family: Arial, sans-serif;
+        }
+
+        .col-md-4 {
+            margin-top: 50px;
+        }
+
+        .login-box {
+            background-color: #e9c490;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+
+        .login-box p {
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-control {
+            border-radius: 4px;
+            box-shadow: 0px 0px 5px 0px #ccc;
+        }
+
+        .form-control:focus {
+            border-color: #66afe9;
+            outline: 0;
+            box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102, 175, 233, .6);
+        }
+
+        .input-group-addon {
+            border: 1px solid #ccc;
+            background-color: #5cb85c;
+            border-radius: 4px;
+            padding: 6px 12px;
+        }
+
+        .input-group-addon i {
+            color: #000; /* Change icon color to black */
+        }
+
+        .btn-success {
+            background-color: #5cb85c;
+            border-color: #4cae4c;
+            border-radius: 4px;
+            padding: 10px 20px;
+            font-size: 18px;
+            width: 100%;
+        }
+
+        .btn-success:hover {
+            background-color: #4cae4c;
+            border-color: #4cae4c;
+        }
+
+        .mssg {
+            text-align: center;
+            margin-top: 20px;
+            color: #d9534f;
+            font-size: 18px;
+        }
+
+        .username-box {
+            display: none;
+            margin-top: 50px;
+            background-color: #fff;
+            color: #333;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .btn-logout {
+            background-color: #d9534f;
+            border-color: #d43f3a;
+            border-radius: 4px;
+            padding: 10px 20px;
+            font-size: 18px;
+            width: 100%;
+        }
+
+        .btn-logout:hover {
+            background-color: #c9302c;
+            border-color: #ac2925;
+        }
+
+        a {
+            color: #337ab7;
+        }
+
+        a:hover {
+            color: #23527c;
+        }
+    </style>
+
+    <script type="text/javascript">
+        $(document).ready(function(){
+
+            $("#form").submit(function(event) {
+                event.preventDefault();
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/login',
+                    data: $('#form').serialize(),
+                    dataType: "json",
+                    success: function(response){
+                        $('#form')[0].reset();
+
+                        document.getElementById("check").innerHTML = response.Success;
+                        
+                        setTimeout(function(){
+                            document.getElementById("check").innerHTML = "";
+                        }, 3000);
+
+                        if (response.Success == "Success!") {
+                            window.location.href = 'http://localhost:3001?username=' + response.username;
+                        };
+                    },
+                    error: function() {
+                    }
+                })
+            });
+
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 col-md-offset-4">
+                <div class="login-box">
+                    <p>Login</p>
+                    <div class="form-group">
+                        <form id="form" method="post" >
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
+                                <input type="text" name="email" placeholder="E-mail" required="" class="form-control">
+                            </div>
+                            <br/>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                                <input type="password" name="password" placeholder="Password" required="" class="form-control">
+                            </div>
+                            <br/>
+                            <input type="submit" value="Login" class="btn btn-success">
+                        </form>
+                    </div>
+                    <div class="mssg bg-danger">
+                        <span id="check" ></span>
+                    </div>
+                    <div id="LangTable"><a href="http://localhost:3001/" id="aa"></a>
+                    </div>
+                    <div><span>Forgot your password? </span><a href="/forgetpass">Click here</a></div>
+                    <div><span>Create a new account? </span><a href="/">Register here</a></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
