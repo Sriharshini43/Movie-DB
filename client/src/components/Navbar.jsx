@@ -17,7 +17,7 @@ const Navbar = () => {
       setUsername(usernameFromQuery);
     } else {
       // Fetch username from backend upon component mount if not in query parameters
-      axios.get('http://127.0.0.1:3000/login', { withCredentials: true })
+      axios.get('https://movie-db-fhe1.onrender.com/login', { withCredentials: true })
         .then(response => {
           if (response.data.username) {
             setUsername(response.data.username);
@@ -30,10 +30,10 @@ const Navbar = () => {
   }, [location.search]);
 
   const handleLogout = () => {
-    axios.get('http://localhost:3001/?username=Sriharshini', { withCredentials: true })
+    axios.get('https://movie-db-steel-eight.vercel.app/?username=Sriharshini', { withCredentials: true })
       .then(() => {
         setUsername(null);
-        window.location.href = 'http://localhost:3001/';
+        window.location.href = 'https://movie-db-steel-eight.vercel.app/';
       })
       .catch(error => {
         console.error("Error logging out:", error);
@@ -60,7 +60,7 @@ const Navbar = () => {
     },
     loginContainer: {
       backgroundColor: 'yellow',
-      color: 'black',
+      color: 'black',F
       padding: '10px 20px',
       borderRadius: '5px',
       textDecoration: 'none',
@@ -119,7 +119,7 @@ const Navbar = () => {
           <button onClick={handleLogout} style={styles.logoutButton}>Logout</button>
         </div>
       ) : (
-        <a href="http://127.0.0.1:3000/login" style={styles.loginContainer}>Login</a>
+        <a href="https://movie-db-fhe1.onrender.com/login" style={styles.loginContainer}>Login</a>
       )}
     </nav>
   );
