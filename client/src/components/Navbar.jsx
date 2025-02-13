@@ -60,7 +60,7 @@ const Navbar = () => {
     },
     loginContainer: {
       backgroundColor: 'yellow',
-      color: 'black',F
+      color: 'black',
       padding: '10px 20px',
       borderRadius: '5px',
       textDecoration: 'none',
