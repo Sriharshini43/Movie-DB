@@ -35,4 +35,5 @@ First Terminal:
 Second Terminal:
     node server.js
 
+Note: Change mongodb connection URL in my server.js.
 
