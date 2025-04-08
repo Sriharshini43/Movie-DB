@@ -7,7 +7,7 @@ const indexRouter = require('./routes/index');
 const app = express();
 
 
-mongoose.connect('mongodb+srv://harshini:Harshini8@cluster0.ezhx5uc.mongodb.net/registrationFormHeruko?retryWrites=true&w=majority', {
+mongoose.connect('mongodb+srv://harshini:harshini8@cluster0.ezhx5uc.mongodb.net/registrationFormHeruko?retryWrites=true&w=majority', {
   useNewUrlParser: true,
   useUnifiedTopology: true
 }, (err) => {
